@@ -188,11 +188,18 @@ class RequestApi(object):
                 print('The task ' + taskid + ' is in processing, task status: ' + str(data))
 
             # 每次获取进度间隔20S
-            time.sleep(20)
+            time.sleep(5)
         # 5 . 获取结果
-        self.get_result_request(taskid=taskid)
+        text = self.get_result_request(taskid=taskid)
+        onebest = json.loads(text["data"])[0]["onebest"]
+        return onebest
 
 
 if __name__ == '__main__':
-    api = RequestApi(appid="57c7ca43", secret_key="0047d5315c869cc41ba92060f601c9cc", upload_file_path=r"./yasuo/135974730.mp3")
-    api.all_api_request()
+    path_list = os.listdir("./yasuo")
+    for audio_file_path in path_list:
+        api = RequestApi(appid="57c7ca43", secret_key="0047d5315c869cc41ba92060f601c9cc", upload_file_path="./yasuo/" + audio_file_path)
+        api.all_api_request()
+        with os.open("./text/" + api.all_api_request(), os.O_RDWR) as fd:
+            os.write(fd, bytes(api.all_api_request(), "UTF-8"))
+
