@@ -188,7 +188,7 @@ class RequestApi(object):
                 print('The task ' + taskid + ' is in processing, task status: ' + str(data))
 
             # 每次获取进度间隔20S
-            time.sleep(2)
+            time.sleep(3)
         # 5 . 获取结果
         text = self.get_result_request(taskid=taskid)
         onebest = json.loads(text["data"])[0]["onebest"]
@@ -196,20 +196,25 @@ class RequestApi(object):
 
 
 if __name__ == '__main__':
-    path_list = os.listdir("./yasuo/")
+    path_list = os.listdir("./永恩/")
     onebest_list = []
     for audio_file_path in path_list:
-        api = RequestApi(appid="57c7ca43", secret_key="0047d5315c869cc41ba92060f601c9cc", upload_file_path="./yasuo/" + audio_file_path)
+        api = RequestApi(appid="57c7ca43", secret_key="0047d5315c869cc41ba92060f601c9cc", upload_file_path="./永恩/" + audio_file_path)
         # api.all_api_request()
         onebest = api.all_api_request()
         onebest_list.append(onebest)
     # print(onebest_list)
     n = 0
     for i in path_list:
-        oldname = "./yasuo/" + i
-        newname = "./yasuo/" + onebest_list[n] + ".mp3"
-        os.rename(oldname, newname)
-        n = n+1
+        oldname = "./永恩/" + i
+        try:
+            newname = "./永恩/" + onebest_list[n] + ".wav"
+            os.rename(oldname, newname)
+        except FileExistsError:
+            newname = "./永恩/" + onebest_list[n] + str(n) + ".wav"
+            os.rename(oldname, newname)
+        finally:
+            n = n + 1
 
         # with open("text.txt", mode="a+", encoding="UTF-8") as f:
         #     f.write(api.all_api_request() + "\n")
