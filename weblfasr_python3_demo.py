@@ -201,8 +201,12 @@ if __name__ == '__main__':
     for audio_file_path in path_list:
         api = RequestApi(appid="57c7ca43", secret_key="0047d5315c869cc41ba92060f601c9cc", upload_file_path="./永恩/" + audio_file_path)
         # api.all_api_request()
-        onebest = api.all_api_request()
-        onebest_list.append(onebest)
+        try:
+            onebest = api.all_api_request()
+            print(audio_file_path)
+            onebest_list.append(onebest)
+        except IndexError:
+            onebest_list.append("AV")
     # print(onebest_list)
     n = 0
     for i in path_list:
